@@ -28,7 +28,7 @@ export const GuessHistoryDialog = (props: Props) => {
                                 return (
                                     <ListItem>
                                         <DialogContentText>
-                                            {guess}: {GuessChecker(guess, props.opp_word)} {GuessChecker(guess, props.opp_word) === 4 ? '- WINNER!' : ''}
+                                            {guess.toUpperCase()}: {GuessChecker(guess, props.opp_word)} {GuessChecker(guess, props.opp_word) === 4 ? '- WINNER!' : ''}
                                         </DialogContentText>
                                     </ListItem>
                                 )
