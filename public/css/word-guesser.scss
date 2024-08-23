@@ -1,0 +1,30 @@
+body {
+    margin: 0;
+}
+
+.btn {
+    &__input {
+        &.MuiButtonBase-root {
+            height: 56px;
+        }
+    }
+}
+
+.letter-input {
+    input {
+        text-align: center;
+        width: 2rem;
+        height: 2rem;
+        font-size: 2rem;
+        @media screen and (min-width: 600px){
+            width: 4rem;
+            height: 4rem;
+            font-size: 4rem;
+        }
+        @media screen and (min-width: 900px){
+            width: 5rem;
+            height: 5rem;
+            font-size: 5rem;
+        }
+    }
+}
