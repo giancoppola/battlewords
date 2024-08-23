@@ -92,11 +92,11 @@ export const PlayerStatus = (props: PlayerStatusProps) => {
                     setPlayerTwoIcon('hourglass');
                 }
                 else if (room.player_2.rematch === 'no') {
-                    setPlayerTwoStatus(`Player does not want a rematch!`);
+                    setPlayerTwoStatus(`Does not want a rematch!`);
                     setPlayerTwoIcon('pending');
                 }
                 else if (room.player_2.rematch === 'yes') {
-                    setPlayerTwoStatus(`Player wants a rematch!`);
+                    setPlayerTwoStatus(`Wants a rematch!`);
                     setPlayerTwoIcon('thumbs_up');
                 }
                 if (!room.player_1.rematch) {
@@ -104,11 +104,11 @@ export const PlayerStatus = (props: PlayerStatusProps) => {
                     setPlayerOneIcon('hourglass');
                 }
                 else if (room.player_1.rematch === 'no') {
-                    setPlayerOneStatus(`Player does not want a rematch!`);
+                    setPlayerOneStatus(`Does not want a rematch!`);
                     setPlayerOneIcon('pending');
                 }
                 else if (room.player_1.rematch === 'yes') {
-                    setPlayerOneStatus(`Player wants a rematch!`);
+                    setPlayerOneStatus(`Wants a rematch!`);
                     setPlayerOneIcon('thumbs_up');
                 }
                 break;
