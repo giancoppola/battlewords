@@ -81,7 +81,7 @@ export const PlayerStatus = (props: PlayerStatusProps) => {
                 setPlayerOneIcon('hourglass');
                 break;
             case "PLAYER_2_GUESSED":
-                setPlayerTwoStatus(`Guessed ${room.player_2.current_guess.toUpperCase()}. Waiting for Player 2 to guess...`);
+                setPlayerTwoStatus(`Guessed ${room.player_2.current_guess.toUpperCase()}. Waiting for Player 1 to guess...`);
                 setPlayerTwoIcon('pending');
                 setPlayerOneStatus('Now guessing...');
                 setPlayerOneIcon('hourglass');

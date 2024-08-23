@@ -68,7 +68,7 @@ var PlayerStatus = function (props) {
                 setPlayerOneIcon('hourglass');
                 break;
             case "PLAYER_2_GUESSED":
-                setPlayerTwoStatus("Guessed ".concat(room.player_2.current_guess.toUpperCase(), ". Waiting for Player 2 to guess..."));
+                setPlayerTwoStatus("Guessed ".concat(room.player_2.current_guess.toUpperCase(), ". Waiting for Player 1 to guess..."));
                 setPlayerTwoIcon('pending');
                 setPlayerOneStatus('Now guessing...');
                 setPlayerOneIcon('hourglass');
