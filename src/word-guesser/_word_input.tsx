@@ -38,6 +38,7 @@ export const WordInput = (props: Props) => {
     }
     const UpdateWord = () => {
         let word = letterOne + letterTwo + letterThree + letterFour;
+        word = word.toLowerCase();
         if (word.length === 4) {
             if (wordSet[word] != null) {
                 props.currentStatus === 'ROOM_CREATED' ? props.setWord(word) : props.setCurrentGuess(word);
