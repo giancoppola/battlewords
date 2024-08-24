@@ -114,21 +114,23 @@ const Handle_Room_Joined = (socket: Socket) => {
 const Handle_Room_Left = (socket: Socket) => {
     socket.on(LEAVE_ROOM, async (player_number: PLAYERS, room_name: string) => {
         users[socket.id].room_name = '';
-        rooms[room_name][player_number] = structuredClone(EMPTY_PLAYER_IN_ROOM);
-        rooms[room_name][player_number + '_id'] = '';
-        rooms[room_name].player_count = rooms[room_name].player_count - 1;
-        // Handle player leaving in the middle of a game
-        if (rooms[room_name].current_status != 'GAME_FINISH' && rooms[room_name].current_status != 'ROOM_CREATED') {
-            const roomUsers: Set<string> | undefined = io.sockets.adapter.rooms.get(room_name);
-            rooms[room_name].current_status = 'ROOM_CLOSING';
-            Send_Latest_Data(room_name);
-            roomUsers?.forEach((room_user: string) => {
-                users[room_user].room_name = '';
-            })
-            delete rooms[room_name];
+        if (rooms[room_name]) {
+            rooms[room_name][player_number] = structuredClone(EMPTY_PLAYER_IN_ROOM);
+            rooms[room_name][player_number + '_id'] = '';
+            rooms[room_name].player_count = rooms[room_name].player_count - 1;
+            // Handle player leaving in the middle of a game
+            if (rooms[room_name].current_status != 'GAME_FINISH' && rooms[room_name].current_status != 'ROOM_CREATED') {
+                const roomUsers: Set<string> | undefined = io.sockets.adapter.rooms.get(room_name);
+                rooms[room_name].current_status = 'ROOM_CLOSING';
+                Send_Latest_Data(room_name);
+                roomUsers?.forEach((room_user: string) => {
+                    users[room_user].room_name = '';
+                })
+                delete rooms[room_name];
+            }
+            else { Send_Latest_Data(room_name); }
+            rooms[room_name].player_count === 0 ? delete rooms[room_name] : null;
         }
-        else { Send_Latest_Data(room_name); }
-        rooms[room_name].player_count === 0 ? delete rooms[room_name] : null;
     })
 }
 
