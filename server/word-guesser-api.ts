@@ -3,12 +3,10 @@ const express = require('express')
 const rateLimit = require("express-rate-limit");
 export const router: Router = express.Router();
 
-import { RemoveQuotes } from "../src/word-guesser/word-guesser-tools";
-
 import { Mongoose, Query } from "mongoose";
 const mongoose: Mongoose = require('mongoose');
 // MongoDB model imports
-import { iPlayer, PlayerSchema, PlayerModel, iRoom, SuccessResponse, iPlayerInRoom } from "../types/word-guesser-types";
+import { iPlayer, PlayerSchema, PlayerModel, iRoom, SuccessResponse, iPlayerInRoom, ExternalRoom } from "../types/word-guesser-types";
 import { rooms } from "../server";
 
 const limit = rateLimit({
@@ -59,7 +57,7 @@ router.route('/players/find')
 /////////////////////////
 
 router.route('/rooms/find')
-.get( async ( req: Request, res: Response, next: NextFunction) => {
+.get( async (req: Request, res: Response, next: NextFunction) => {
     let exists = Room_DoesRoomExist(req.query.name as string);
     if (exists) {
         res.status(200).send(true);
@@ -70,7 +68,7 @@ router.route('/rooms/find')
 })
 
 router.route('/rooms/joinable')
-.get( async ( req: Request, res: Response, next: NextFunction) => {
+.get( async (req: Request, res: Response, next: NextFunction) => {
     let joinable = Room_IsRoomJoinable(req.query.name as string);
     if (joinable) {
         res.status(200).send(true);
@@ -78,6 +76,21 @@ router.route('/rooms/joinable')
     else {
         res.status(200).send(false);
     }
+})
+
+router.route('/rooms/all')
+.get( async (req: Request, res: Response, next: NextFunction) => {
+    let roomList: Array<ExternalRoom> = [];
+    for (const key in rooms) {
+        let room: ExternalRoom = {
+            room_name: rooms[key].room_name,
+            player_count: rooms[key].player_count,
+            number_of_games_played: rooms[key].number_of_games_played,
+            current_status: rooms[key].current_status,
+        }
+        roomList.push(room);
+    }
+    res.status(200).json(JSON.stringify(roomList));
 })
 
 /////////////////////////////

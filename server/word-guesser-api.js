@@ -136,6 +136,24 @@ exports.router.route('/rooms/joinable')
         return [2 /*return*/];
     });
 }); });
+exports.router.route('/rooms/all')
+    .get(function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var roomList, key, room;
+    return __generator(this, function (_a) {
+        roomList = [];
+        for (key in server_1.rooms) {
+            room = {
+                room_name: server_1.rooms[key].room_name,
+                player_count: server_1.rooms[key].player_count,
+                number_of_games_played: server_1.rooms[key].number_of_games_played,
+                current_status: server_1.rooms[key].current_status,
+            };
+            roomList.push(room);
+        }
+        res.status(200).json(JSON.stringify(roomList));
+        return [2 /*return*/];
+    });
+}); });
 /////////////////////////////
 // Rooms API Endpoints End //
 /////////////////////////////

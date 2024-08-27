@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Fetch_Player_LeaveRoom = exports.Fetch_Player_CreateNewPlayer = exports.Fetch_Player_CheckPlayerId = exports.Fetch_Room_IsRoomJoinable = exports.Fetch_Room_CreateRoom = exports.Fetch_Room_DoesRoomExist = exports.GuessChecker = exports.RemoveQuotes = void 0;
+exports.Fetch_Player_LeaveRoom = exports.Fetch_Player_CreateNewPlayer = exports.Fetch_Player_CheckPlayerId = exports.Fetch_Room_RoomList = exports.Fetch_Room_IsRoomJoinable = exports.Fetch_Room_CreateRoom = exports.Fetch_Room_DoesRoomExist = exports.GuessChecker = exports.RemoveQuotes = void 0;
 /////////////
 // General //
 /////////////
@@ -109,6 +109,21 @@ var Fetch_Room_IsRoomJoinable = function (room_name) { return __awaiter(void 0, 
     });
 }); };
 exports.Fetch_Room_IsRoomJoinable = Fetch_Room_IsRoomJoinable;
+var Fetch_Room_RoomList = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var roomList;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, fetch("/api/word-guesser/rooms/all")
+                    .then(function (res) { return res.json(); })
+                    .then(function (data) { return JSON.parse(data); })
+                    .catch(function (err) { console.log(err); return []; })];
+            case 1:
+                roomList = _a.sent();
+                return [2 /*return*/, roomList];
+        }
+    });
+}); };
+exports.Fetch_Room_RoomList = Fetch_Room_RoomList;
 ////////////////////////
 // Room API Calls End //
 ////////////////////////

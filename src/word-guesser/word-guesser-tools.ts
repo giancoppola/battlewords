@@ -1,4 +1,4 @@
-import { SuccessResponse } from "../../types/word-guesser-types";
+import { ExternalRoom, SuccessResponse } from "../../types/word-guesser-types";
 
 /////////////
 // General //
@@ -51,6 +51,14 @@ export const Fetch_Room_IsRoomJoinable = async (room_name: string): Promise<bool
     .then((data) => { if (RemoveQuotes(data) === "true") { return true; } return false;})
     .catch(err => {console.log(err); return false});
     return joined;
+}
+
+export const Fetch_Room_RoomList = async (): Promise<Array<ExternalRoom>> => {
+    let roomList: Array<ExternalRoom> = await fetch("/api/word-guesser/rooms/all")
+    .then(res => res.json())
+    .then(data => JSON.parse(data))
+    .catch(err => {console.log(err); return []})
+    return roomList;
 }
 
 ////////////////////////

@@ -59,6 +59,14 @@ export const EMPTY_ROOM: iRoom = {
     current_status: 'ROOM_CREATED'
 }
 
+export interface ExternalRoom {
+    [key: string]: any;
+    room_name: string;
+    player_count: number;
+    number_of_games_played: number;
+    current_status: CURRENT_STATUS;
+}
+
 export interface iPlayer {
     wins: number;
     losses: number;
