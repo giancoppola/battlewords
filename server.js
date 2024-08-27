@@ -148,23 +148,25 @@ var Handle_Room_Left = function (socket) {
         var roomUsers;
         return __generator(this, function (_a) {
             exports.users[socket.id].room_name = '';
-            exports.rooms[room_name][player_number] = structuredClone(word_guesser_types_1.EMPTY_PLAYER_IN_ROOM);
-            exports.rooms[room_name][player_number + '_id'] = '';
-            exports.rooms[room_name].player_count = exports.rooms[room_name].player_count - 1;
-            // Handle player leaving in the middle of a game
-            if (exports.rooms[room_name].current_status != 'GAME_FINISH' && exports.rooms[room_name].current_status != 'ROOM_CREATED') {
-                roomUsers = exports.io.sockets.adapter.rooms.get(room_name);
-                exports.rooms[room_name].current_status = 'ROOM_CLOSING';
-                Send_Latest_Data(room_name);
-                roomUsers === null || roomUsers === void 0 ? void 0 : roomUsers.forEach(function (room_user) {
-                    exports.users[room_user].room_name = '';
-                });
-                delete exports.rooms[room_name];
+            if (exports.rooms[room_name]) {
+                exports.rooms[room_name][player_number] = structuredClone(word_guesser_types_1.EMPTY_PLAYER_IN_ROOM);
+                exports.rooms[room_name][player_number + '_id'] = '';
+                exports.rooms[room_name].player_count = exports.rooms[room_name].player_count - 1;
+                // Handle player leaving in the middle of a game
+                if (exports.rooms[room_name].current_status != 'GAME_FINISH' && exports.rooms[room_name].current_status != 'ROOM_CREATED') {
+                    roomUsers = exports.io.sockets.adapter.rooms.get(room_name);
+                    exports.rooms[room_name].current_status = 'ROOM_CLOSING';
+                    Send_Latest_Data(room_name);
+                    roomUsers === null || roomUsers === void 0 ? void 0 : roomUsers.forEach(function (room_user) {
+                        exports.users[room_user].room_name = '';
+                    });
+                    delete exports.rooms[room_name];
+                }
+                else {
+                    Send_Latest_Data(room_name);
+                }
+                exports.rooms[room_name].player_count === 0 ? delete exports.rooms[room_name] : null;
             }
-            else {
-                Send_Latest_Data(room_name);
-            }
-            exports.rooms[room_name].player_count === 0 ? delete exports.rooms[room_name] : null;
             return [2 /*return*/];
         });
     }); });
