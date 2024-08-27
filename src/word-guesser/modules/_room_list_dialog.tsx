@@ -2,6 +2,7 @@ import { useEffect, useState, Dispatch } from 'react'
 import { Box, List, ListItem, TextField, Typography, Dialog, DialogContent, Divider, DialogTitle, DialogContentText, DialogActions, Button } from '@mui/material'
 import { ExternalRoom } from '../../../types/word-guesser-types';
 import { Fetch_Room_RoomList } from '../word-guesser-tools';
+import { History, Person } from '@mui/icons-material';
 
 interface Props {
     open: boolean;
@@ -20,17 +21,44 @@ export const RoomListDialog = (props: Props) => {
             <DialogTitle>Room List</DialogTitle>
             <DialogContent dividers>
                 <List>
+                    {/* <ListItem sx={{justifyContent: 'space-between', gap: '1rem'}}>
+                        <Box>Room Name</Box>
+                        <Box>Players</Box>
+                        <Box>Games Played</Box>
+                    </ListItem>
+                    <Divider/> */}
                     <>
                         {
-                            roomList.map((room: ExternalRoom) => {
+                            roomList.map((room: ExternalRoom, index: number) => {
                                 return (
-                                    <ListItem>
-                                        {room.room_name} {room.player_count}
-                                    </ListItem>
+                                    <>
+                                        { index > 0 && roomList.length > 1 &&
+                                            <Divider/>
+                                        }
+                                        <ListItem sx={{justifyContent: 'space-between', gap: '1rem'}}>
+                                            <Box minWidth='150px'>{room.room_name}</Box>
+                                            <Box display='flex' gap='.5rem'>
+                                                <Person/> {room.player_count}/2
+                                            </Box>
+                                            <Box display='flex' gap='.5rem'>
+                                                <History/> {room.number_of_games_played}
+                                            </Box>
+                                            <Button disabled={room.player_count === 2}>
+                                                {room.player_count < 2 && "Join"}
+                                                {room.player_count === 2 && "Room Full"}
+                                            </Button>
+                                        </ListItem>
+                                        { index > 0 && roomList.length > 1 && index < roomList.length - 1  &&
+                                            <Divider/>
+                                        }
+                                    </>
                                 )
                             })
                         }
                     </>
+                    { roomList.length < 1 &&
+                        <ListItem>No public rooms open!</ListItem>
+                    }
                 </List>
             </DialogContent>
             <DialogActions>
