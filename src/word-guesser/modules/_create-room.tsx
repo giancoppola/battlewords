@@ -1,5 +1,5 @@
 import { Dispatch, useEffect, useState } from 'react'
-import { Box, Button, IconButton, List, ListItem, TextField, Typography } from '@mui/material'
+import { Box, Button, IconButton, List, ListItem, TextField, Tooltip, Typography } from '@mui/material'
 import { RemoveQuotes, Fetch_Room_DoesRoomExist, Fetch_Room_CreateRoom } from '../word-guesser-tools'
 import { PLAYER_1 } from '../../../types/word-guesser-types';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
@@ -26,10 +26,16 @@ export const CreateRoom = (props: Props) => {
             <Typography variant='h3'>Create a room</Typography>
             <List>
                 <ListItem sx={{ gap: '1rem', paddingLeft: 0 }}>
-                    <TextField error={errMsg ? true : false} fullWidth={true} label="Room Name" value={newRoomName} onChange={(e) => setNewRoomName(e.target.value)}/>
-                    <IconButton onClick={() => setVisible(!visible)}>
-                        { visible ? <Visibility color='primary'/> : <VisibilityOff/> }
-                    </IconButton>
+                    <TextField error={errMsg ? true : false} fullWidth={true} label="Room Name" value={newRoomName} onChange={(e) => setNewRoomName(e.target.value)}
+                    InputProps={{ endAdornment:
+                        <Tooltip title={ visible ? 'Sets the room to public so anyone can join' : 'Sets the room to private so it does not appear in the room list'}>
+                            <IconButton onClick={() => setVisible(!visible)}>
+                                { visible ? <Visibility color='primary'/> : <VisibilityOff/> }
+                            </IconButton>
+                        </Tooltip>
+                    }}
+                    onKeyUp={(e) => {if (e.key === "Enter") {CheckRoom(newRoomName)}}}
+                    />
                     <Button className='btn__input' variant='contained' onClick={() => CheckRoom(newRoomName)}>Create</Button>
                 </ListItem>
             </List>

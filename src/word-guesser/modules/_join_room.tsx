@@ -37,7 +37,9 @@ export const JoinRoom = (props: Props) => {
                 <Typography variant='h3'>Join a room</Typography>
                 <List>
                     <ListItem sx={{ gap: '1rem', paddingLeft: 0 }}>
-                        <TextField error={errMsg ? true : false} fullWidth={true} label="Room Name" value={newRoomName} onChange={(e) => setNewRoomName(e.target.value)}/>
+                        <TextField error={errMsg ? true : false} fullWidth={true} label="Room Name" value={newRoomName} onChange={(e) => setNewRoomName(e.target.value)}
+                        onKeyUp={(e) => { if (e.key === "Enter") {CheckRoom(newRoomName)} }}
+                        />
                         <Button className='btn__input' variant='contained' onClick={() => CheckRoom(newRoomName)}>Join</Button>
                     </ListItem>
                     <ListItem sx={{ paddingLeft: 0 }}>
