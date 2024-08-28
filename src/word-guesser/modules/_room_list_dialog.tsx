@@ -7,14 +7,23 @@ import { History, Person } from '@mui/icons-material';
 interface Props {
     open: boolean;
     setOpen: Function;
+    CheckRoom: Function;
 }
 export const RoomListDialog = (props: Props) => {
     const [roomList, setRoomList]: [Array<ExternalRoom>, Dispatch<Array<ExternalRoom>>] = useState<Array<ExternalRoom>>([]);
     const [errMsg, setErrMsg]: [string, Dispatch<string>] = useState<string>("");
     useEffect(() => {
-        Fetch_Room_RoomList()
-        .then(res => {setRoomList(res); setErrMsg(""); console.log(res);})
-        .catch(err => {setRoomList([]); setErrMsg(err.message)})
+        if (props.open) {
+            Fetch_Room_RoomList()
+            .then(res => {setRoomList(res); setErrMsg(""); console.log(res);})
+            .catch(err => {setRoomList([]); setErrMsg(err.message)})
+            setTimeout(function tick(){
+                Fetch_Room_RoomList()
+                .then(res => {setRoomList(res); setErrMsg(""); console.log(res);})
+                .catch(err => {setRoomList([]); setErrMsg(err.message)})
+                setTimeout(tick, 2000)
+            }, 2000)
+        }
     }, [props.open])
     return (
         <Dialog open={props.open}>
@@ -43,9 +52,11 @@ export const RoomListDialog = (props: Props) => {
                                             <Box display='flex' gap='.5rem'>
                                                 <History/> {room.number_of_games_played}
                                             </Box>
-                                            <Button disabled={room.player_count === 2}>
+                                            <Button disabled={room.player_count === 2}
+                                            onClick={() => {props.CheckRoom(room.room_name)}}
+                                            >
                                                 {room.player_count < 2 && "Join"}
-                                                {room.player_count === 2 && "Room Full"}
+                                                {room.player_count === 2 && "Full"}
                                             </Button>
                                         </ListItem>
                                         { index > 0 && roomList.length > 1 && index < roomList.length - 1  &&

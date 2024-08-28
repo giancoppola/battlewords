@@ -42,9 +42,11 @@ var react_1 = require("react");
 var material_1 = require("@mui/material");
 var word_guesser_tools_1 = require("../word-guesser-tools");
 var word_guesser_types_1 = require("../../../types/word-guesser-types");
+var icons_material_1 = require("@mui/icons-material");
 var CreateRoom = function (props) {
-    var _a = (0, react_1.useState)(""), errMsg = _a[0], setErrMsg = _a[1];
-    var _b = (0, react_1.useState)(""), newRoomName = _b[0], setNewRoomName = _b[1];
+    var _a = (0, react_1.useState)(true), visible = _a[0], setVisible = _a[1];
+    var _b = (0, react_1.useState)(""), errMsg = _b[0], setErrMsg = _b[1];
+    var _c = (0, react_1.useState)(""), newRoomName = _c[0], setNewRoomName = _c[1];
     var CheckRoom = function (room_name) { return __awaiter(void 0, void 0, void 0, function () {
         var room_exists;
         return __generator(this, function (_a) {
@@ -68,6 +70,6 @@ var CreateRoom = function (props) {
         });
     }); };
     (0, react_1.useEffect)(function () { setErrMsg(''); }, [newRoomName]);
-    return ((0, jsx_runtime_1.jsxs)(material_1.Box, { children: [(0, jsx_runtime_1.jsx)(material_1.Typography, { variant: 'h3', children: "Create a room" }), (0, jsx_runtime_1.jsx)(material_1.List, { children: (0, jsx_runtime_1.jsxs)(material_1.ListItem, { sx: { gap: '1rem', paddingLeft: 0 }, children: [(0, jsx_runtime_1.jsx)(material_1.TextField, { error: errMsg ? true : false, fullWidth: true, label: "Room Name", value: newRoomName, onChange: function (e) { return setNewRoomName(e.target.value); } }), (0, jsx_runtime_1.jsx)(material_1.Button, { className: 'btn__input', variant: 'contained', onClick: function () { return CheckRoom(newRoomName); }, children: "Create" })] }) }), (0, jsx_runtime_1.jsx)(material_1.Typography, { minHeight: '1.5rem', color: 'red', children: errMsg })] }));
+    return ((0, jsx_runtime_1.jsxs)(material_1.Box, { children: [(0, jsx_runtime_1.jsx)(material_1.Typography, { variant: 'h3', children: "Create a room" }), (0, jsx_runtime_1.jsx)(material_1.List, { children: (0, jsx_runtime_1.jsxs)(material_1.ListItem, { sx: { gap: '1rem', paddingLeft: 0 }, children: [(0, jsx_runtime_1.jsx)(material_1.TextField, { error: errMsg ? true : false, fullWidth: true, label: "Room Name", value: newRoomName, onChange: function (e) { return setNewRoomName(e.target.value); } }), (0, jsx_runtime_1.jsx)(material_1.IconButton, { onClick: function () { return setVisible(!visible); }, children: visible ? (0, jsx_runtime_1.jsx)(icons_material_1.Visibility, { color: 'primary' }) : (0, jsx_runtime_1.jsx)(icons_material_1.VisibilityOff, {}) }), (0, jsx_runtime_1.jsx)(material_1.Button, { className: 'btn__input', variant: 'contained', onClick: function () { return CheckRoom(newRoomName); }, children: "Create" })] }) }), (0, jsx_runtime_1.jsx)(material_1.Typography, { minHeight: '1.5rem', color: 'red', children: errMsg })] }));
 };
 exports.CreateRoom = CreateRoom;

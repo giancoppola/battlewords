@@ -42,13 +42,13 @@ export const JoinRoom = (props: Props) => {
                     </ListItem>
                     <ListItem sx={{ paddingLeft: 0 }}>
                         <Button fullWidth variant='outlined' onClick={() => setShowRoomList(true)}>
-                            Find a Room
+                            Find a Public Room
                         </Button>
                     </ListItem>
                 </List>
                 <Typography minHeight='1.5rem' color='red'>{errMsg}</Typography>
             </Box>
-            <RoomListDialog open={showRoomList} setOpen={setShowRoomList}/>
+            <RoomListDialog CheckRoom={CheckRoom} open={showRoomList} setOpen={setShowRoomList}/>
         </>
     )
 }

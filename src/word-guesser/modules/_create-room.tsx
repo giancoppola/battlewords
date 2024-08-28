@@ -1,7 +1,8 @@
 import { Dispatch, useEffect, useState } from 'react'
-import { Box, Button, List, ListItem, TextField, Typography } from '@mui/material'
+import { Box, Button, IconButton, List, ListItem, TextField, Typography } from '@mui/material'
 import { RemoveQuotes, Fetch_Room_DoesRoomExist, Fetch_Room_CreateRoom } from '../word-guesser-tools'
 import { PLAYER_1 } from '../../../types/word-guesser-types';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 interface Props {
     playerId: string;
@@ -9,6 +10,7 @@ interface Props {
     setPlayerNumber: Function;
 }
 export const CreateRoom = (props: Props) => {
+    const [visible, setVisible]: [boolean, Dispatch<boolean>] = useState<boolean>(true);
     const [errMsg, setErrMsg]: [string, Dispatch<string>] = useState<string>("");
     const [newRoomName, setNewRoomName]: [string, Dispatch<string>] = useState<string>("");
     const CheckRoom = async (room_name: string) => {
@@ -25,6 +27,9 @@ export const CreateRoom = (props: Props) => {
             <List>
                 <ListItem sx={{ gap: '1rem', paddingLeft: 0 }}>
                     <TextField error={errMsg ? true : false} fullWidth={true} label="Room Name" value={newRoomName} onChange={(e) => setNewRoomName(e.target.value)}/>
+                    <IconButton onClick={() => setVisible(!visible)}>
+                        { visible ? <Visibility color='primary'/> : <VisibilityOff/> }
+                    </IconButton>
                     <Button className='btn__input' variant='contained' onClick={() => CheckRoom(newRoomName)}>Create</Button>
                 </ListItem>
             </List>
