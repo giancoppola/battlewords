@@ -21,15 +21,15 @@ export const WordInput = (props: Props) => {
         switch(element) {
             case 'letter-one':
                 setLetterOne(value);
-                document.getElementById("letter-two")?.focus();
+                value && document.getElementById("letter-two")?.focus();
                 break;
             case 'letter-two':
                 setLetterTwo(value);
-                document.getElementById("letter-three")?.focus();
+                value && document.getElementById("letter-three")?.focus();
                 break;
             case 'letter-three':
                 setLetterThree(value);
-                document.getElementById("letter-four")?.focus();
+                value && document.getElementById("letter-four")?.focus();
                 break;
             case 'letter-four':
                 setLetterFour(value);
@@ -70,7 +70,7 @@ export const WordInput = (props: Props) => {
     const InputProps: InputBaseComponentProps = { maxLength: 1 };
     return (
         <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center' gap='1rem'>
-            <Box display='flex' gap='1rem'> 
+            <Box display='flex' gap='1rem'>
                 <TextField className='letter-input' disabled={!props.canSubmitWord} id='letter-one' inputProps={InputProps} value={letterOne} onChange={(e) => HandleChange(e.target.value, 'letter-one')} />
                 <TextField className='letter-input' disabled={!props.canSubmitWord} id='letter-two' inputProps={InputProps} value={letterTwo} onChange={(e) => HandleChange(e.target.value, 'letter-two')} />
                 <TextField className='letter-input' disabled={!props.canSubmitWord} id='letter-three' inputProps={InputProps} value={letterThree} onChange={(e) => HandleChange(e.target.value, 'letter-three')} />

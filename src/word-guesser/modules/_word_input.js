@@ -16,15 +16,15 @@ var WordInput = function (props) {
         switch (element) {
             case 'letter-one':
                 setLetterOne(value);
-                (_a = document.getElementById("letter-two")) === null || _a === void 0 ? void 0 : _a.focus();
+                value && ((_a = document.getElementById("letter-two")) === null || _a === void 0 ? void 0 : _a.focus());
                 break;
             case 'letter-two':
                 setLetterTwo(value);
-                (_b = document.getElementById("letter-three")) === null || _b === void 0 ? void 0 : _b.focus();
+                value && ((_b = document.getElementById("letter-three")) === null || _b === void 0 ? void 0 : _b.focus());
                 break;
             case 'letter-three':
                 setLetterThree(value);
-                (_c = document.getElementById("letter-four")) === null || _c === void 0 ? void 0 : _c.focus();
+                value && ((_c = document.getElementById("letter-four")) === null || _c === void 0 ? void 0 : _c.focus());
                 break;
             case 'letter-four':
                 setLetterFour(value);
