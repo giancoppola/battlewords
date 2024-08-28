@@ -82,13 +82,15 @@ router.route('/rooms/all')
 .get( async (req: Request, res: Response, next: NextFunction) => {
     let roomList: Array<ExternalRoom> = [];
     for (const key in rooms) {
-        let room: ExternalRoom = {
-            room_name: rooms[key].room_name,
-            player_count: rooms[key].player_count,
-            number_of_games_played: rooms[key].number_of_games_played,
-            current_status: rooms[key].current_status,
+        if (!rooms[key].is_private){
+            let room: ExternalRoom = {
+                room_name: rooms[key].room_name,
+                player_count: rooms[key].player_count,
+                number_of_games_played: rooms[key].number_of_games_played,
+                current_status: rooms[key].current_status,
+            }
+            roomList.push(room);
         }
-        roomList.push(room);
     }
     res.status(200).json(JSON.stringify(roomList));
 })

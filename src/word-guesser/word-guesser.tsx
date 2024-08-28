@@ -75,6 +75,7 @@ const Main = () => {
     const [showGuessHistory, setShowGuessHistory]: [boolean, Dispatch<boolean>] = useState<boolean>(false);
     const [showStatus, setShowStatus]: [boolean, Dispatch<boolean>] = useState<boolean>(false);
     const [statusDialogMsg, setStatusDialogMsg]: [string, Dispatch<string>] = useState<string>('');
+    const [roomPrivate, setRoomPrivate]: [boolean, Dispatch<boolean>] = useState<boolean>(false);
     // State used at all times
     const [darkMode, setDarkMode]: [boolean, Dispatch<boolean>] = useState<boolean>(false);
     const [userCount, setUserCount]: [number, Dispatch<number>] = useState<number>(0);
@@ -158,7 +159,7 @@ const Main = () => {
         }
     }, [])
     useEffect(() => { playerId ? socket.emit(ACTIVE, playerId) : null }, [playerId])
-    useEffect(() => { roomName ? socket.emit(ROOM_JOINED, roomName) : null }, [roomName])
+    useEffect(() => { roomName ? socket.emit(ROOM_JOINED, roomName, roomPrivate) : null }, [roomName])
     useEffect(() => { ready ? socket.emit(READY, playerId, roomName, word) : socket.emit(NOT_READY, playerId, roomName) }, [ready])
     useEffect(() => {
         if (currentStatus === 'ROOM_CREATED') {
@@ -185,7 +186,7 @@ const Main = () => {
                 <Header darkMode={darkMode} setDarkMode={setDarkMode} userCount={userCount} />
                 { playerId && !roomName &&
                     <Box height='100%' display='flex' flexDirection='column' justifyContent='center' gap='2rem'>
-                        <CreateRoom setPlayerNumber={setPlayerNumber} setRoomName={setRoomName} playerId={playerId} />
+                        <CreateRoom roomPrivate={roomPrivate} setRoomPrivate={setRoomPrivate} setPlayerNumber={setPlayerNumber} setRoomName={setRoomName} playerId={playerId} />
                         <JoinRoom setPlayerNumber={setPlayerNumber} setRoomName={setRoomName} playerId={playerId} />
                     </Box>
                 }

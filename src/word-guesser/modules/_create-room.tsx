@@ -5,12 +5,13 @@ import { PLAYER_1 } from '../../../types/word-guesser-types';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 interface Props {
+    roomPrivate: boolean;
+    setRoomPrivate: Function;
     playerId: string;
     setRoomName: Function;
     setPlayerNumber: Function;
 }
 export const CreateRoom = (props: Props) => {
-    const [visible, setVisible]: [boolean, Dispatch<boolean>] = useState<boolean>(true);
     const [errMsg, setErrMsg]: [string, Dispatch<string>] = useState<string>("");
     const [newRoomName, setNewRoomName]: [string, Dispatch<string>] = useState<string>("");
     const CheckRoom = async (room_name: string) => {
@@ -28,9 +29,9 @@ export const CreateRoom = (props: Props) => {
                 <ListItem sx={{ gap: '1rem', paddingLeft: 0 }}>
                     <TextField error={errMsg ? true : false} fullWidth={true} label="Room Name" value={newRoomName} onChange={(e) => setNewRoomName(e.target.value)}
                     InputProps={{ endAdornment:
-                        <Tooltip title={ visible ? 'Sets the room to public so anyone can join' : 'Sets the room to private so it does not appear in the room list'}>
-                            <IconButton onClick={() => setVisible(!visible)}>
-                                { visible ? <Visibility color='primary'/> : <VisibilityOff/> }
+                        <Tooltip title={ !props.roomPrivate ? 'Sets the room to public so anyone can join' : 'Sets the room to private so it does not appear in the room list'}>
+                            <IconButton onClick={() => props.setRoomPrivate(!props.roomPrivate)}>
+                                { !props.roomPrivate ? <Visibility color='primary'/> : <VisibilityOff/> }
                             </IconButton>
                         </Tooltip>
                     }}

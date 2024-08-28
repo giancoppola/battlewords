@@ -129,11 +129,14 @@ var Handle_Player_Disconnect = function (socket) {
     }); });
 };
 var Handle_Room_Joined = function (socket) {
-    socket.on(word_guesser_types_1.ROOM_JOINED, function (room_name) { return __awaiter(void 0, void 0, void 0, function () {
+    socket.on(word_guesser_types_1.ROOM_JOINED, function (room_name, is_private) { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
             console.log('ROOM JOINED');
             exports.users[socket.id].room_name = room_name;
-            !exports.rooms[room_name] ? exports.rooms[room_name] = structuredClone(word_guesser_types_1.EMPTY_ROOM) : null;
+            if (!exports.rooms[room_name]) {
+                exports.rooms[room_name] = structuredClone(word_guesser_types_1.EMPTY_ROOM);
+                exports.rooms[room_name].is_private = is_private;
+            }
             !exports.rooms[room_name].room_name ? exports.rooms[room_name].room_name = room_name : null;
             !exports.rooms[room_name].player_1_id ? exports.rooms[room_name].player_1_id = exports.users[socket.id].player_id : exports.rooms[room_name].player_2_id = exports.users[socket.id].player_id;
             exports.rooms[room_name].player_count = exports.rooms[room_name].player_count + 1;

@@ -99,10 +99,13 @@ const Handle_Player_Disconnect = (socket: Socket) => {
 }
 
 const Handle_Room_Joined = (socket: Socket) => {
-    socket.on(ROOM_JOINED, async (room_name: string) => {
+    socket.on(ROOM_JOINED, async (room_name: string, is_private: boolean) => {
         console.log('ROOM JOINED')
         users[socket.id].room_name = room_name;
-        !rooms[room_name] ? rooms[room_name] = structuredClone(EMPTY_ROOM) : null;
+        if (!rooms[room_name]) {
+            rooms[room_name] = structuredClone(EMPTY_ROOM)
+            rooms[room_name].is_private = is_private;
+        }
         !rooms[room_name].room_name ? rooms[room_name].room_name = room_name : null;
         !rooms[room_name].player_1_id ? rooms[room_name].player_1_id = users[socket.id].player_id : rooms[room_name].player_2_id = users[socket.id].player_id;
         rooms[room_name].player_count = rooms[room_name].player_count + 1;

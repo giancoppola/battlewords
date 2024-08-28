@@ -142,13 +142,15 @@ exports.router.route('/rooms/all')
     return __generator(this, function (_a) {
         roomList = [];
         for (key in server_1.rooms) {
-            room = {
-                room_name: server_1.rooms[key].room_name,
-                player_count: server_1.rooms[key].player_count,
-                number_of_games_played: server_1.rooms[key].number_of_games_played,
-                current_status: server_1.rooms[key].current_status,
-            };
-            roomList.push(room);
+            if (!server_1.rooms[key].is_private) {
+                room = {
+                    room_name: server_1.rooms[key].room_name,
+                    player_count: server_1.rooms[key].player_count,
+                    number_of_games_played: server_1.rooms[key].number_of_games_played,
+                    current_status: server_1.rooms[key].current_status,
+                };
+                roomList.push(room);
+            }
         }
         res.status(200).json(JSON.stringify(roomList));
         return [2 /*return*/];

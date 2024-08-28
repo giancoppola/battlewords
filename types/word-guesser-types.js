@@ -16,6 +16,7 @@ exports.EMPTY_PLAYER_IN_ROOM = {
 };
 exports.EMPTY_ROOM = {
     room_name: '',
+    is_private: false,
     player_1: structuredClone(exports.EMPTY_PLAYER_IN_ROOM),
     player_1_id: "",
     player_2: structuredClone(exports.EMPTY_PLAYER_IN_ROOM),
