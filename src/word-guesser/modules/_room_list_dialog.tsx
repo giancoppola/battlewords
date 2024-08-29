@@ -12,30 +12,19 @@ interface Props {
 export const RoomListDialog = (props: Props) => {
     const [roomList, setRoomList]: [Array<ExternalRoom>, Dispatch<Array<ExternalRoom>>] = useState<Array<ExternalRoom>>([]);
     const [errMsg, setErrMsg]: [string, Dispatch<string>] = useState<string>("");
+    const GetRoomList = async () => {
+        await Fetch_Room_RoomList()
+        .then(res => {setRoomList(res); setErrMsg(""); console.log(res);})
+        .catch(err => {setRoomList([]); setErrMsg(err.message)})
+    }
     useEffect(() => {
-        if (props.open) {
-            Fetch_Room_RoomList()
-            .then(res => {setRoomList(res); setErrMsg(""); console.log(res);})
-            .catch(err => {setRoomList([]); setErrMsg(err.message)})
-            setTimeout(function tick(){
-                Fetch_Room_RoomList()
-                .then(res => {setRoomList(res); setErrMsg(""); console.log(res);})
-                .catch(err => {setRoomList([]); setErrMsg(err.message)})
-                setTimeout(tick, 2000)
-            }, 2000)
-        }
+        props.open && GetRoomList();
     }, [props.open])
     return (
         <Dialog open={props.open}>
             <DialogTitle>Room List</DialogTitle>
             <DialogContent dividers>
                 <List>
-                    {/* <ListItem sx={{justifyContent: 'space-between', gap: '1rem'}}>
-                        <Box>Room Name</Box>
-                        <Box>Players</Box>
-                        <Box>Games Played</Box>
-                    </ListItem>
-                    <Divider/> */}
                     <>
                         {
                             roomList.map((room: ExternalRoom, index: number) => {
@@ -73,6 +62,7 @@ export const RoomListDialog = (props: Props) => {
                 </List>
             </DialogContent>
             <DialogActions>
+                <Button onClick={GetRoomList}>Refresh</Button>
                 <Button onClick={() => {props.setOpen(false)}}>Close</Button>
             </DialogActions>
         </Dialog>
