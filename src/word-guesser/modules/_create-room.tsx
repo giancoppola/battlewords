@@ -1,6 +1,6 @@
 import { Dispatch, useEffect, useState } from 'react'
 import { Box, Button, IconButton, List, ListItem, TextField, Tooltip, Typography } from '@mui/material'
-import { RemoveQuotes, Fetch_Room_DoesRoomExist, Fetch_Room_CreateRoom } from '../word-guesser-tools'
+import { RemoveQuotes, Fetch_Room_DoesRoomExist, Fetch_Room_CreateRoom, Fetch_Player_IsInRoom } from '../word-guesser-tools'
 import { PLAYER_1 } from '../../../types/word-guesser-types';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
@@ -16,8 +16,10 @@ export const CreateRoom = (props: Props) => {
     const [newRoomName, setNewRoomName]: [string, Dispatch<string>] = useState<string>("");
     const CheckRoom = async (room_name: string) => {
         if (!room_name) { setErrMsg('Please provide a room name!'); return; }
-        let room_exists = await Fetch_Room_DoesRoomExist(room_name);
+        let room_exists: boolean = await Fetch_Room_DoesRoomExist(room_name);
         if (room_exists) { setErrMsg("Room with that name already exists!"); return; }
+        let player_in_room: boolean = await Fetch_Player_IsInRoom(props.playerId);
+        if (player_in_room) { setErrMsg("Player is already in a room!"); return; }
         props.setRoomName(room_name);
         props.setPlayerNumber(PLAYER_1);
     }

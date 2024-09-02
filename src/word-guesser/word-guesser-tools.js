@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Fetch_Player_LeaveRoom = exports.Fetch_Player_CreateNewPlayer = exports.Fetch_Player_CheckPlayerId = exports.Fetch_Room_RoomList = exports.Fetch_Room_IsRoomJoinable = exports.Fetch_Room_CreateRoom = exports.Fetch_Room_DoesRoomExist = exports.GuessChecker = exports.RemoveQuotes = void 0;
+exports.Fetch_Player_IsInRoom = exports.Fetch_Player_LeaveRoom = exports.Fetch_Player_CreateNewPlayer = exports.Fetch_Player_CheckPlayerId = exports.Fetch_Room_RoomList = exports.Fetch_Room_IsRoomJoinable = exports.Fetch_Room_CreateRoom = exports.Fetch_Room_DoesRoomExist = exports.GuessChecker = exports.RemoveQuotes = void 0;
 /////////////
 // General //
 /////////////
@@ -181,6 +181,24 @@ var Fetch_Player_LeaveRoom = function (player_id, room_name) { return __awaiter(
     });
 }); };
 exports.Fetch_Player_LeaveRoom = Fetch_Player_LeaveRoom;
+var Fetch_Player_IsInRoom = function (player_id) { return __awaiter(void 0, void 0, void 0, function () {
+    var is_in_room;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, fetch("/api/word-guesser/players/is-in-room?id=".concat(player_id))
+                    .then(function (res) { return res.text(); })
+                    .then(function (data) { return data; })
+                    .catch(function (e) { return e; })];
+            case 1:
+                is_in_room = _a.sent();
+                if (is_in_room === 'true') {
+                    return [2 /*return*/, true];
+                }
+                return [2 /*return*/, false];
+        }
+    });
+}); };
+exports.Fetch_Player_IsInRoom = Fetch_Player_IsInRoom;
 //////////////////////////
 // Player API Calls End //
 //////////////////////////

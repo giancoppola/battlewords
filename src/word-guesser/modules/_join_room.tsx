@@ -1,6 +1,6 @@
 import { Dispatch, useEffect, useState } from 'react'
 import { Box, Button, List, ListItem, TextField, Typography } from '@mui/material'
-import { RemoveQuotes, Fetch_Room_DoesRoomExist, Fetch_Room_IsRoomJoinable } from '../word-guesser-tools'
+import { RemoveQuotes, Fetch_Room_DoesRoomExist, Fetch_Room_IsRoomJoinable, Fetch_Player_IsInRoom } from '../word-guesser-tools'
 import { PLAYER_2, SuccessResponse } from '../../../types/word-guesser-types';
 import { RoomListDialog } from './_room_list_dialog';
 
@@ -17,6 +17,8 @@ export const JoinRoom = (props: Props) => {
         if (!room_name) { setErrMsg('Please provide a room name!'); return; }
         let room_exists = await Fetch_Room_DoesRoomExist(room_name);
         if (!room_exists) { setErrMsg("No room with that name exists!"); return; }
+        let player_in_room: boolean = await Fetch_Player_IsInRoom(props.playerId);
+        if (player_in_room) { setErrMsg("Player is already in a room!"); return; }
         let room_joinable = await Fetch_Room_IsRoomJoinable(room_name);
         if (room_joinable) {
             props.setRoomName(room_name);

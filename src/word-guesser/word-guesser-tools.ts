@@ -99,6 +99,18 @@ export const Fetch_Player_LeaveRoom = async (player_id: string, room_name: strin
     return left;
 }
 
+export const Fetch_Player_IsInRoom = async (player_id: string) => {
+    let is_in_room = await fetch(`/api/word-guesser/players/is-in-room?id=${player_id}`)
+    .then(res => res.text())
+    .then(data => data)
+    .catch(e => e)
+    if (is_in_room === 'true') {
+        return true;
+    }
+    return false; 
+}
+
+
 //////////////////////////
 // Player API Calls End //
 //////////////////////////

@@ -7,7 +7,7 @@ import { Mongoose, Query } from "mongoose";
 const mongoose: Mongoose = require('mongoose');
 // MongoDB model imports
 import { iPlayer, PlayerSchema, PlayerModel, iRoom, SuccessResponse, iPlayerInRoom, ExternalRoom } from "../types/word-guesser-types";
-import { rooms } from "../server";
+import { rooms, users } from "../server";
 
 const limit = rateLimit({
     // Every 5 minutes
@@ -45,6 +45,17 @@ router.route('/players/find')
     }
     else {
         res.status(200).send(false);
+    }
+})
+
+router.route('/players/is-in-room')
+.get( async ( req: Request, res: Response, next: NextFunction) => {
+    try{
+        let is_in_room = await Player_IsInRoom(req.query.id as string);
+        res.status(200).send(is_in_room);
+    }
+    catch(e){
+        res.status(400).send(e);
     }
 })
 
@@ -134,7 +145,7 @@ export const Player_CheckExists = async (player_id: string): Promise<boolean> =>
     }
 }
 
-export const Player_ResetLastPlayedDate = async (player_id: string)=> {
+export const Player_ResetLastPlayedDate = async (player_id: string) => {
     try {
         const player = await PlayerModel.findOneAndUpdate(
             { _id: player_id },
@@ -144,6 +155,17 @@ export const Player_ResetLastPlayedDate = async (player_id: string)=> {
     catch (e) {
         console.log(e);
     }
+}
+
+export const Player_IsInRoom = (player_id: string) => {
+    for (const user in users) {
+        if (users[user].player_id === player_id) {
+            if (users[user].room_name) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 export const Room_DoesRoomExist = (room_name: string) => {
