@@ -24,6 +24,7 @@ export interface iPlayerInRoom {
 export interface iRoom {
     [key: string]: any;
     room_name: string;
+    is_private: boolean;
     player_1: iPlayerInRoom;
     player_1_id: string;
     player_2: iPlayerInRoom;
@@ -48,6 +49,7 @@ export const EMPTY_PLAYER_IN_ROOM: iPlayerInRoom = {
 }
 export const EMPTY_ROOM: iRoom = {
     room_name: '',
+    is_private: false,
     player_1: structuredClone(EMPTY_PLAYER_IN_ROOM),
     player_1_id: "",
     player_2: structuredClone(EMPTY_PLAYER_IN_ROOM),
@@ -57,6 +59,14 @@ export const EMPTY_ROOM: iRoom = {
     winner: '',
     number_of_games_played: 0,
     current_status: 'ROOM_CREATED'
+}
+
+export interface ExternalRoom {
+    [key: string]: any;
+    room_name: string;
+    player_count: number;
+    number_of_games_played: number;
+    current_status: CURRENT_STATUS;
 }
 
 export interface iPlayer {

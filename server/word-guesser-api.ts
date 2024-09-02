@@ -3,13 +3,11 @@ const express = require('express')
 const rateLimit = require("express-rate-limit");
 export const router: Router = express.Router();
 
-import { RemoveQuotes } from "../src/word-guesser/word-guesser-tools";
-
 import { Mongoose, Query } from "mongoose";
 const mongoose: Mongoose = require('mongoose');
 // MongoDB model imports
-import { iPlayer, PlayerSchema, PlayerModel, iRoom, SuccessResponse, iPlayerInRoom } from "../types/word-guesser-types";
-import { rooms } from "../server";
+import { iPlayer, PlayerSchema, PlayerModel, iRoom, SuccessResponse, iPlayerInRoom, ExternalRoom } from "../types/word-guesser-types";
+import { rooms, users } from "../server";
 
 const limit = rateLimit({
     // Every 5 minutes
@@ -50,6 +48,17 @@ router.route('/players/find')
     }
 })
 
+router.route('/players/is-in-room')
+.get( async ( req: Request, res: Response, next: NextFunction) => {
+    try{
+        let is_in_room = await Player_IsInRoom(req.query.id as string);
+        res.status(200).send(is_in_room);
+    }
+    catch(e){
+        res.status(400).send(e);
+    }
+})
+
 ///////////////////////////////
 // Players API Endpoints End //
 ///////////////////////////////
@@ -59,7 +68,7 @@ router.route('/players/find')
 /////////////////////////
 
 router.route('/rooms/find')
-.get( async ( req: Request, res: Response, next: NextFunction) => {
+.get( async (req: Request, res: Response, next: NextFunction) => {
     let exists = Room_DoesRoomExist(req.query.name as string);
     if (exists) {
         res.status(200).send(true);
@@ -70,7 +79,7 @@ router.route('/rooms/find')
 })
 
 router.route('/rooms/joinable')
-.get( async ( req: Request, res: Response, next: NextFunction) => {
+.get( async (req: Request, res: Response, next: NextFunction) => {
     let joinable = Room_IsRoomJoinable(req.query.name as string);
     if (joinable) {
         res.status(200).send(true);
@@ -78,6 +87,23 @@ router.route('/rooms/joinable')
     else {
         res.status(200).send(false);
     }
+})
+
+router.route('/rooms/all')
+.get( async (req: Request, res: Response, next: NextFunction) => {
+    let roomList: Array<ExternalRoom> = [];
+    for (const key in rooms) {
+        if (!rooms[key].is_private){
+            let room: ExternalRoom = {
+                room_name: rooms[key].room_name,
+                player_count: rooms[key].player_count,
+                number_of_games_played: rooms[key].number_of_games_played,
+                current_status: rooms[key].current_status,
+            }
+            roomList.push(room);
+        }
+    }
+    res.status(200).json(JSON.stringify(roomList));
 })
 
 /////////////////////////////
@@ -119,7 +145,7 @@ export const Player_CheckExists = async (player_id: string): Promise<boolean> =>
     }
 }
 
-export const Player_ResetLastPlayedDate = async (player_id: string)=> {
+export const Player_ResetLastPlayedDate = async (player_id: string) => {
     try {
         const player = await PlayerModel.findOneAndUpdate(
             { _id: player_id },
@@ -129,6 +155,17 @@ export const Player_ResetLastPlayedDate = async (player_id: string)=> {
     catch (e) {
         console.log(e);
     }
+}
+
+export const Player_IsInRoom = (player_id: string) => {
+    for (const user in users) {
+        if (users[user].player_id === player_id) {
+            if (users[user].room_name) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 export const Room_DoesRoomExist = (room_name: string) => {

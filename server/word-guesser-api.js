@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Room_IsRoomJoinable = exports.Room_DoesRoomExist = exports.Player_ResetLastPlayedDate = exports.Player_CheckExists = exports.Player_GetAll = exports.Player_CreateNew = exports.router = void 0;
+exports.Room_IsRoomJoinable = exports.Room_DoesRoomExist = exports.Player_IsInRoom = exports.Player_ResetLastPlayedDate = exports.Player_CheckExists = exports.Player_GetAll = exports.Player_CreateNew = exports.router = void 0;
 var express = require('express');
 var rateLimit = require("express-rate-limit");
 exports.router = express.Router();
@@ -102,6 +102,26 @@ exports.router.route('/players/find')
         }
     });
 }); });
+exports.router.route('/players/is-in-room')
+    .get(function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var is_in_room, e_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, (0, exports.Player_IsInRoom)(req.query.id)];
+            case 1:
+                is_in_room = _a.sent();
+                res.status(200).send(is_in_room);
+                return [3 /*break*/, 3];
+            case 2:
+                e_1 = _a.sent();
+                res.status(400).send(e_1);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
 ///////////////////////////////
 // Players API Endpoints End //
 ///////////////////////////////
@@ -133,6 +153,26 @@ exports.router.route('/rooms/joinable')
         else {
             res.status(200).send(false);
         }
+        return [2 /*return*/];
+    });
+}); });
+exports.router.route('/rooms/all')
+    .get(function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var roomList, key, room;
+    return __generator(this, function (_a) {
+        roomList = [];
+        for (key in server_1.rooms) {
+            if (!server_1.rooms[key].is_private) {
+                room = {
+                    room_name: server_1.rooms[key].room_name,
+                    player_count: server_1.rooms[key].player_count,
+                    number_of_games_played: server_1.rooms[key].number_of_games_played,
+                    current_status: server_1.rooms[key].current_status,
+                };
+                roomList.push(room);
+            }
+        }
+        res.status(200).json(JSON.stringify(roomList));
         return [2 /*return*/];
     });
 }); });
@@ -198,7 +238,7 @@ var Player_CheckExists = function (player_id) { return __awaiter(void 0, void 0,
 }); };
 exports.Player_CheckExists = Player_CheckExists;
 var Player_ResetLastPlayedDate = function (player_id) { return __awaiter(void 0, void 0, void 0, function () {
-    var player, e_1;
+    var player, e_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -208,14 +248,25 @@ var Player_ResetLastPlayedDate = function (player_id) { return __awaiter(void 0,
                 player = _a.sent();
                 return [3 /*break*/, 3];
             case 2:
-                e_1 = _a.sent();
-                console.log(e_1);
+                e_2 = _a.sent();
+                console.log(e_2);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });
 }); };
 exports.Player_ResetLastPlayedDate = Player_ResetLastPlayedDate;
+var Player_IsInRoom = function (player_id) {
+    for (var user in server_1.users) {
+        if (server_1.users[user].player_id === player_id) {
+            if (server_1.users[user].room_name) {
+                return true;
+            }
+        }
+    }
+    return false;
+};
+exports.Player_IsInRoom = Player_IsInRoom;
 var Room_DoesRoomExist = function (room_name) {
     var name = room_name;
     var exists = server_1.rooms[name] != null;

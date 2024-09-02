@@ -2,26 +2,26 @@ import { createRoot } from 'react-dom/client'
 import { useEffect, useState, Dispatch, StrictMode } from 'react'
 import { AppBar, Box, Button, createTheme, CssBaseline, List, ListItem, TextField, ThemeProvider, Typography, IconButton, responsiveFontSizes } from '@mui/material'
 
-import { CreateRoom } from './_create-room'
-import { JoinRoom } from './_join_room'
-import { Footer } from './_footer'
+import { CreateRoom } from './modules/_create-room'
+import { JoinRoom } from './modules/_join_room'
+import { Footer } from './modules/_footer'
 
 import { iPlayer, PlayerModel, PLAYER_ID, ACTIVE, ROOM_JOINED, USER_COUNT, LATEST_DATA, iRoom, EMPTY_ROOM, PLAYERS, CURRENT_STATUS, READY, NOT_READY, PLAYER_1, PLAYER_1_GUESSED, PLAYER_2_GUESSED, PLAYER_2, PLAYER_1_WORD, PLAYER_2_WORD, GAME_FINISH, LEAVE_ROOM, REMATCH_VOTE, PLAYER_VOTE } from '../../types/word-guesser-types'
 import { Fetch_Player_CheckPlayerId, Fetch_Player_CreateNewPlayer, GuessChecker, RemoveQuotes } from './word-guesser-tools'
 
 import { io, Socket } from 'socket.io-client'
 
-import { WordInput } from './_word_input'
-import { PlayerStatus } from './_player_status'
-import { GuessHistoryDialog } from './guess_history_dialog'
-import { LeaveRoomButton } from './_leave_room'
-import { GuessHistoryButton } from './_guess_history_button'
+import { WordInput } from './modules/_word_input'
+import { PlayerStatus } from './modules/_player_status'
+import { GuessHistoryDialog } from './modules/_guess_history_dialog'
+import { LeaveRoomButton } from './modules/_leave_room'
+import { GuessHistoryButton } from './modules/_guess_history_button'
 import { Brightness4, Brightness7 } from '@mui/icons-material'
-import { FloatingOptions } from './_floating_options'
-import { StatusMessage } from './_status_message'
-import { RematchVote } from './_rematch_vote'
-import { StatusDialog } from './_status_dialog'
-import { Header } from './_header'
+import { FloatingOptions } from './modules/_floating_options'
+import { StatusMessage } from './modules/_status_message'
+import { RematchVote } from './modules/_rematch_vote'
+import { StatusDialog } from './modules/_status_dialog'
+import { Header } from './modules/_header'
 
 const socket: Socket = io();
 
@@ -75,6 +75,7 @@ const Main = () => {
     const [showGuessHistory, setShowGuessHistory]: [boolean, Dispatch<boolean>] = useState<boolean>(false);
     const [showStatus, setShowStatus]: [boolean, Dispatch<boolean>] = useState<boolean>(false);
     const [statusDialogMsg, setStatusDialogMsg]: [string, Dispatch<string>] = useState<string>('');
+    const [roomPrivate, setRoomPrivate]: [boolean, Dispatch<boolean>] = useState<boolean>(false);
     // State used at all times
     const [darkMode, setDarkMode]: [boolean, Dispatch<boolean>] = useState<boolean>(false);
     const [userCount, setUserCount]: [number, Dispatch<number>] = useState<number>(0);
@@ -158,7 +159,7 @@ const Main = () => {
         }
     }, [])
     useEffect(() => { playerId ? socket.emit(ACTIVE, playerId) : null }, [playerId])
-    useEffect(() => { roomName ? socket.emit(ROOM_JOINED, roomName) : null }, [roomName])
+    useEffect(() => { roomName ? socket.emit(ROOM_JOINED, roomName, roomPrivate) : null }, [roomName])
     useEffect(() => { ready ? socket.emit(READY, playerId, roomName, word) : socket.emit(NOT_READY, playerId, roomName) }, [ready])
     useEffect(() => {
         if (currentStatus === 'ROOM_CREATED') {
@@ -185,7 +186,7 @@ const Main = () => {
                 <Header darkMode={darkMode} setDarkMode={setDarkMode} userCount={userCount} />
                 { playerId && !roomName &&
                     <Box height='100%' display='flex' flexDirection='column' justifyContent='center' gap='2rem'>
-                        <CreateRoom setPlayerNumber={setPlayerNumber} setRoomName={setRoomName} playerId={playerId} />
+                        <CreateRoom roomPrivate={roomPrivate} setRoomPrivate={setRoomPrivate} setPlayerNumber={setPlayerNumber} setRoomName={setRoomName} playerId={playerId} />
                         <JoinRoom setPlayerNumber={setPlayerNumber} setRoomName={setRoomName} playerId={playerId} />
                     </Box>
                 }

@@ -40,21 +40,21 @@ var jsx_runtime_1 = require("react/jsx-runtime");
 var client_1 = require("react-dom/client");
 var react_1 = require("react");
 var material_1 = require("@mui/material");
-var _create_room_1 = require("./_create-room");
-var _join_room_1 = require("./_join_room");
-var _footer_1 = require("./_footer");
+var _create_room_1 = require("./modules/_create-room");
+var _join_room_1 = require("./modules/_join_room");
+var _footer_1 = require("./modules/_footer");
 var word_guesser_types_1 = require("../../types/word-guesser-types");
 var word_guesser_tools_1 = require("./word-guesser-tools");
 var socket_io_client_1 = require("socket.io-client");
-var _word_input_1 = require("./_word_input");
-var _player_status_1 = require("./_player_status");
-var guess_history_dialog_1 = require("./guess_history_dialog");
-var _leave_room_1 = require("./_leave_room");
-var _guess_history_button_1 = require("./_guess_history_button");
-var _status_message_1 = require("./_status_message");
-var _rematch_vote_1 = require("./_rematch_vote");
-var _status_dialog_1 = require("./_status_dialog");
-var _header_1 = require("./_header");
+var _word_input_1 = require("./modules/_word_input");
+var _player_status_1 = require("./modules/_player_status");
+var _guess_history_dialog_1 = require("./modules/_guess_history_dialog");
+var _leave_room_1 = require("./modules/_leave_room");
+var _guess_history_button_1 = require("./modules/_guess_history_button");
+var _status_message_1 = require("./modules/_status_message");
+var _rematch_vote_1 = require("./modules/_rematch_vote");
+var _status_dialog_1 = require("./modules/_status_dialog");
+var _header_1 = require("./modules/_header");
 var socket = (0, socket_io_client_1.io)();
 // Based on #D4DCFF as a core color, using Figma Material Theme Builder and https://zenoo.github.io/mui-theme-creator/
 var DarkTheme = (0, material_1.createTheme)({
@@ -105,11 +105,12 @@ var Main = function () {
     var _h = (0, react_1.useState)(false), showGuessHistory = _h[0], setShowGuessHistory = _h[1];
     var _j = (0, react_1.useState)(false), showStatus = _j[0], setShowStatus = _j[1];
     var _k = (0, react_1.useState)(''), statusDialogMsg = _k[0], setStatusDialogMsg = _k[1];
+    var _l = (0, react_1.useState)(false), roomPrivate = _l[0], setRoomPrivate = _l[1];
     // State used at all times
-    var _l = (0, react_1.useState)(false), darkMode = _l[0], setDarkMode = _l[1];
-    var _m = (0, react_1.useState)(0), userCount = _m[0], setUserCount = _m[1];
-    var _o = (0, react_1.useState)(""), roomName = _o[0], setRoomName = _o[1];
-    var _p = (0, react_1.useState)(""), playerId = _p[0], setPlayerId = _p[1];
+    var _m = (0, react_1.useState)(false), darkMode = _m[0], setDarkMode = _m[1];
+    var _o = (0, react_1.useState)(0), userCount = _o[0], setUserCount = _o[1];
+    var _p = (0, react_1.useState)(""), roomName = _p[0], setRoomName = _p[1];
+    var _q = (0, react_1.useState)(""), playerId = _q[0], setPlayerId = _q[1];
     var CheckPlayerId = function (player_id) { return __awaiter(void 0, void 0, void 0, function () {
         var valid;
         return __generator(this, function (_a) {
@@ -207,7 +208,7 @@ var Main = function () {
         }
     }, []);
     (0, react_1.useEffect)(function () { playerId ? socket.emit(word_guesser_types_1.ACTIVE, playerId) : null; }, [playerId]);
-    (0, react_1.useEffect)(function () { roomName ? socket.emit(word_guesser_types_1.ROOM_JOINED, roomName) : null; }, [roomName]);
+    (0, react_1.useEffect)(function () { roomName ? socket.emit(word_guesser_types_1.ROOM_JOINED, roomName, roomPrivate) : null; }, [roomName]);
     (0, react_1.useEffect)(function () { ready ? socket.emit(word_guesser_types_1.READY, playerId, roomName, word) : socket.emit(word_guesser_types_1.NOT_READY, playerId, roomName); }, [ready]);
     (0, react_1.useEffect)(function () {
         if (currentStatus === 'ROOM_CREATED') {
@@ -236,10 +237,10 @@ var Main = function () {
     }, [currentGuess]);
     socket.on(word_guesser_types_1.USER_COUNT, function (user_count) { return setUserCount(user_count); });
     return ((0, jsx_runtime_1.jsxs)(material_1.ThemeProvider, { theme: darkMode ? DarkTheme : LightTheme, children: [(0, jsx_runtime_1.jsx)(material_1.CssBaseline, {}), (0, jsx_runtime_1.jsxs)(material_1.Box, { component: 'section', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center', height: '100dvh', width: '100dvw', children: [(0, jsx_runtime_1.jsx)(_header_1.Header, { darkMode: darkMode, setDarkMode: setDarkMode, userCount: userCount }), playerId && !roomName &&
-                        (0, jsx_runtime_1.jsxs)(material_1.Box, { height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '2rem', children: [(0, jsx_runtime_1.jsx)(_create_room_1.CreateRoom, { setPlayerNumber: setPlayerNumber, setRoomName: setRoomName, playerId: playerId }), (0, jsx_runtime_1.jsx)(_join_room_1.JoinRoom, { setPlayerNumber: setPlayerNumber, setRoomName: setRoomName, playerId: playerId })] }), playerId && roomName &&
+                        (0, jsx_runtime_1.jsxs)(material_1.Box, { height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '2rem', children: [(0, jsx_runtime_1.jsx)(_create_room_1.CreateRoom, { roomPrivate: roomPrivate, setRoomPrivate: setRoomPrivate, setPlayerNumber: setPlayerNumber, setRoomName: setRoomName, playerId: playerId }), (0, jsx_runtime_1.jsx)(_join_room_1.JoinRoom, { setPlayerNumber: setPlayerNumber, setRoomName: setRoomName, playerId: playerId })] }), playerId && roomName &&
                         (0, jsx_runtime_1.jsxs)(material_1.Box, { height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', gap: '2rem', margin: '1rem 0', children: [(0, jsx_runtime_1.jsxs)(material_1.Box, { children: [(0, jsx_runtime_1.jsx)(_status_message_1.StatusMessage, { currentStatus: currentStatus, winner: roomData.winner, word: word }), (0, jsx_runtime_1.jsx)(_player_status_1.PlayerStatus, { roomData: roomData })] }), currentStatus != 'GAME_FINISH' &&
                                     (0, jsx_runtime_1.jsx)(_word_input_1.WordInput, { canSubmitWord: canSubmitWord, currentStatus: currentStatus, setCurrentGuess: setCurrentGuess, setWord: setWord }), currentStatus === 'GAME_FINISH' &&
-                                    (0, jsx_runtime_1.jsx)(_rematch_vote_1.RematchVote, { vote: PlayerVote }), (0, jsx_runtime_1.jsxs)(material_1.Box, { children: [(0, jsx_runtime_1.jsx)(_guess_history_button_1.GuessHistoryButton, { currentStatus: currentStatus, showHistory: setShowGuessHistory }), (0, jsx_runtime_1.jsx)(_leave_room_1.LeaveRoomButton, { leaveRoom: LeaveRoom })] }), (0, jsx_runtime_1.jsx)(guess_history_dialog_1.GuessHistoryDialog, { open: showGuessHistory, setOpen: setShowGuessHistory, opp_word: playerNumber === 'player_1' ? roomData.player_2.word : roomData.player_1.word, guesses: playerNumber === 'player_1' ? roomData.player_1.guesses : roomData.player_2.guesses }), (0, jsx_runtime_1.jsx)(_status_dialog_1.StatusDialog, { roomData: roomData, playerNumber: playerNumber, currentStatus: currentStatus, winner: roomData.winner })] }), (0, jsx_runtime_1.jsx)(_footer_1.Footer, {})] })] }));
+                                    (0, jsx_runtime_1.jsx)(_rematch_vote_1.RematchVote, { vote: PlayerVote }), (0, jsx_runtime_1.jsxs)(material_1.Box, { children: [(0, jsx_runtime_1.jsx)(_guess_history_button_1.GuessHistoryButton, { currentStatus: currentStatus, showHistory: setShowGuessHistory }), (0, jsx_runtime_1.jsx)(_leave_room_1.LeaveRoomButton, { leaveRoom: LeaveRoom })] }), (0, jsx_runtime_1.jsx)(_guess_history_dialog_1.GuessHistoryDialog, { open: showGuessHistory, setOpen: setShowGuessHistory, opp_word: playerNumber === 'player_1' ? roomData.player_2.word : roomData.player_1.word, guesses: playerNumber === 'player_1' ? roomData.player_1.guesses : roomData.player_2.guesses }), (0, jsx_runtime_1.jsx)(_status_dialog_1.StatusDialog, { roomData: roomData, playerNumber: playerNumber, currentStatus: currentStatus, winner: roomData.winner })] }), (0, jsx_runtime_1.jsx)(_footer_1.Footer, {})] })] }));
 };
 var root = (0, client_1.createRoot)(document.getElementById('main'));
 root.render((0, jsx_runtime_1.jsx)(react_1.StrictMode, { children: (0, jsx_runtime_1.jsx)(Main, {}) }));
